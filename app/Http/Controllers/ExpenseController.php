@@ -7,14 +7,31 @@ use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $expenses = Expense::orderByDesc('spent_on')
+        $validated = $request->validate([
+            'month' => ['nullable', 'date_format:Y-m'],
+        ]);
+
+        // 月が指定されていなければ、日本時間の今月を使う
+        $month = $validated['month'] ?? now('Asia/Tokyo')->format('Y-m');
+
+        // 「2026-09」を年と月に分ける
+        [$year, $monthNumber] = explode('-', $month);
+
+        $expenses = Expense::whereYear('spent_on', $year)
+            ->whereMonth('spent_on', $monthNumber)
+            ->orderByDesc('spent_on')
             ->orderByDesc('id')
             ->get();
 
+        // 取得した支出の金額を合計する
+        $total = $expenses->sum('amount');
+
         return view('expenses.index', [
             'expenses' => $expenses,
+            'month' => $month,
+            'total' => $total,
         ]);
     }
 

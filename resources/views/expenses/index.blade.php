@@ -8,6 +8,30 @@
 <body>
     <h1>支出一覧</h1>
 
+    <form method="GET" action="{{ route('expenses.index') }}">
+        <label for="month">表示する月</label>
+        <input
+            type="month"
+            id="month"
+            name="month"
+            value="{{ $month }}"
+            required
+        >
+        <button type="submit">表示する</button>
+
+        <a href="{{ route('expenses.index') }}">今月に戻る</a>
+    </form>
+
+    @error('month')
+        <p role="alert">{{ $message }}</p>
+    @enderror
+
+    <p>
+        {{ $month }} の支出合計：
+        <strong>{{ number_format($total) }}円</strong>
+        （{{ $expenses->count() }}件）
+    </p>
+
     @if (session('success'))
         <p role="status">{{ session('success') }}</p>
     @endif
