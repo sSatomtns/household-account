@@ -75,6 +75,7 @@
                 <th scope="col">日付</th>
                 <th scope="col">金額</th>
                 <th scope="col">内容</th>
+                <th scope="col">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -83,10 +84,15 @@
                     <td>{{ $expense->spent_on }}</td>
                     <td>{{ number_format($expense->amount) }}円</td>
                     <td>{{ $expense->description }}</td>
+                    <td>
+                        <a href="{{ route('expenses.edit', $expense) }}">
+                            編集
+                        </a>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="3">支出はまだ登録されていません。</td>
+                    <td colspan="4">支出はまだ登録されていません。</td>
                 </tr>
             @endforelse
         </tbody>

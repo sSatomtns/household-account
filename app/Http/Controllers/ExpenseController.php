@@ -36,4 +36,29 @@ class ExpenseController extends Controller
             ->route('expenses.index')
             ->with('success', '支出を登録しました。');
     }
+    
+    public function edit(Expense $expense)
+    {
+        return view('expenses.edit', [
+            'expense' => $expense,
+        ]);
+    }
+
+    public function update(Request $request, Expense $expense)
+    {
+        $validated = $request->validate([
+            'spent_on' => ['required', 'date_format:Y-m-d'],
+            'amount' => ['required', 'integer', 'min:1', 'max:999999999'],
+            'description' => ['required', 'string', 'max:255'],
+        ]);
+
+        $expense->spent_on = $validated['spent_on'];
+        $expense->amount = $validated['amount'];
+        $expense->description = $validated['description'];
+        $expense->save();
+
+        return redirect()
+            ->route('expenses.index')
+            ->with('success', '支出を更新しました。');
+    }
 }
