@@ -88,6 +88,18 @@
                         <a href="{{ route('expenses.edit', $expense) }}">
                             編集
                         </a>
+
+                        <form
+                            method="POST"
+                            action="{{ route('expenses.destroy', $expense) }}"
+                            onsubmit="return confirm('この支出を削除しますか？');"
+                            style="display: inline;"
+                        >
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit">削除</button>
+                        </form>
                     </td>
                 </tr>
             @empty

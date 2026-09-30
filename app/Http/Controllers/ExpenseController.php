@@ -61,4 +61,13 @@ class ExpenseController extends Controller
             ->route('expenses.index')
             ->with('success', '支出を更新しました。');
     }
+
+    public function destroy(Expense $expense)
+    {
+        $expense->delete();
+
+        return redirect()
+            ->route('expenses.index')
+            ->with('success', '支出を削除しました。');
+    }
 }
